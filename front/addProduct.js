@@ -2,6 +2,7 @@ document.getElementById('productForm').addEventListener('submit', function(event
     event.preventDefault(); 
 
     const formData = new FormData(this);
+    console.log(formData);
     fetch('http://localhost:5000/addProduct', {
         method: 'POST',
         body: formData
