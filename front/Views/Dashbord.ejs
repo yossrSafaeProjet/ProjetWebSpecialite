@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ma Page</title>
+    <link rel="stylesheet" href="Dashborad.css">
+    <link rel="stylesheet" href="popup.css">
+
+</head>
+<body>
+    <div class="sidebar">
+        <button onclick="afficherPopup()">Ajouter un produit</button>
+        <button onclick="seDeconnecter()">Se déconnecter</button>
+    </div>
+    <div class="content">
+        <!-- Votre contenu principal ici -->
+    </div>
+
+    <div class="popup" id="popup">
+        <h2>Ajouter un produit</h2>
+        <form action="/addProduct" method="post" id="productForm">
+            <label for="libelle">Libellé:</label><br>
+            <input type="text" id="libelle" name="libelle"><br>
+            <label for="description">Description:</label><br>
+            <textarea id="description" name="description"></textarea><br>
+            <label for="images">Images:</label><br>
+            <input type="text" id="images" name="images"><br>
+            <label for="prix">Prix:</label><br>
+            <input type="number" id="prix" name="prix"><br>
+            <label for="categorie">Catégorie:</label><br>
+            <input type="text" id="categorie" name="categorie"><br>
+            <label for="url_statistiques">URL de statistiques:</label><br>
+            <input type="text" id="url_statistiques" name="url_statistiques"><br><br>
+            <input type="submit" value="Ajouter">
+        </form>
+    </div>
+
+    <div id="productList" class="product-list" style="display: none;">
+        <h2>Liste des produits</h2>
+    </div>
+
+    <script>
+        function afficherPopup() {
+            var popup = document.getElementById("popup");
+            popup.style.display = "block";
+        }
+
+        function seDeconnecter() {
+            // Ajouter votre logique de déconnexion ici
+            alert("Fonctionnalité Se déconnecter non implémentée");
+        }
+
+        document.getElementById('productForm').addEventListener('submit', async function(event) {
+            event.preventDefault(); // Empêche l'envoi du formulaire
+             // Récupère les données du formulaire
+            const libelle = document.getElementById('libelle').value;
+            const description = document.getElementById('description').value;
+            const images = document.getElementById('images').value;
+            const prix = document.getElementById('prix').value;
+            const categorie = document.getElementById('categorie').value;
+            const url_statistiques = document.getElementById('url_statistiques').value;
+            fetch('http://localhost:5000/addProduct', {
+                method: 'POST',
+                headers: {
+                'Content-Type': 'application/json',
+            },
+                body: JSON.stringify({libelle,images,description,categorie,prix,url_statistiques }),
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Erreur lors de la requête');
+                }
+                return response.json();
+            })
+            .then(data => {
+                var popup = document.getElementById("popup");
+                popup.style.display = "none";
+                // Actualiser la liste des produits
+                fetchAndDisplayProducts();
+            })
+            .catch(error => {
+                console.error('Erreur:', error);
+                // Gère les erreurs, par exemple afficher un message d'erreur à l'utilisateur
+            });
+        });
+
+        async function fetchAndDisplayProducts() {
+            try {
+                const response = await fetch('http://localhost:5000/AllProduit');
+                if (response.ok) {
+                    const responseData = await response.json();
+                    const productList = document.getElementById('productList');
+                    if (responseData.produits.length > 0) {
+                        productList.style.display = 'block';
+                    } else {
+                        productList.style.display = 'none';
+                    }
+                } else {
+                    console.error('Erreur lors de la récupération des produits');
+                }
+            } catch (error) {
+                console.error('Erreur lors de la récupération des produits:', error);
+            }
+        }
+
+        fetchAndDisplayProducts();
+    </script>
+</body>
+</html>

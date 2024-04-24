@@ -8,7 +8,8 @@ const db = new SQLite3.Database(dbPath);
 router.post('/addProduct', (req, res, next) => {
     const { libelle, description, images, prix, categorie, url_statistiques } = req.body;
     const userId = req.user ? req.user.id : null; // Assurez-vous que l'utilisateur est authentifié et que req.user contient les informations nécessaires
-    
+    console.log(req.body);
+
     // Vérifiez si l'utilisateur est authentifié
    /*  if (!userId) {
         return res.status(401).json({ error: 'Utilisateur non authentifié' });
@@ -22,6 +23,7 @@ router.post('/addProduct', (req, res, next) => {
         if (err) {
             return res.status(500).json({ error: 'Erreur lors de l\'insertion du produit' });
         }
+
         res.json({ success: true, message: 'Produit ajouté avec succès' });
     });
 });

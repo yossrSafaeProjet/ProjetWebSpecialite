@@ -15,7 +15,7 @@ app.use(express.static('Login'));
 /* app.use(express.static('public')); */
 app.use(passport.initialize());
 const bodyParser = require('body-parser');
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 const cors = require('cors');
 
 app.use(cors()); 
