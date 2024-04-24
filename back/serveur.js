@@ -7,6 +7,8 @@ const addProductRouter = require('./AjouterProduit');
 const registrationRouter = require('./Inscription');
 const ficheProductRouter=require('./FicheProduct');
 const app = express();
+const csurf = require('csurf');
+const csrfProtection = csurf({ cookie: true });
 /* require('./Bdd'); */
 
 app.use(express.static('Login'));
@@ -17,19 +19,16 @@ app.use(bodyParser.urlencoded({ extended: true }));
 const cors = require('cors');
 
 app.use(cors()); 
+app.use(csrfProtection);
 // Routes
-
-
+app.get('/csrf-token', csrfProtection, (req, res) => {
+  res.json({ csrfToken: req.csrfToken() });
+});
 
 app.use('/', loginRouter); 
 app.use('', addProductRouter); 
 app.use('', ficheProductRouter);
-app.get('/inscription', (req, res) => {
-  //const csrfToken = req.csrfToken();
-  res.render('inscription');
-  });
-
-app.use('/', registrationRouter); 
+app.use('', registrationRouter); 
 
 const port = process.env.PORT || 5000;
 app.listen(port, () => {
