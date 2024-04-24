@@ -3,29 +3,34 @@ const express = require('express');
 const passport = require('passport');
 const path = require('path')
 const loginRouter = require('./login');
+const addProductRouter = require('./AjouterProduit');
+const registrationRouter = require('./Inscription');
+const ficheProductRouter=require('./FicheProduct');
 const app = express();
-app.set('view engine', 'ejs');
-
 /* require('./Bdd'); */
 
 app.use(express.static('Login'));
-app.use(express.static('public'));
+/* app.use(express.static('public')); */
 app.use(passport.initialize());
 const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static('css'));
+const cors = require('cors');
 
+app.use(cors()); 
 // Routes
-app.get('/login', (req, res) => res.render('login'));
+
+
 
 app.use('/', loginRouter); 
-
+app.use('', addProductRouter); 
+app.use('', ficheProductRouter);
 app.get('/inscription', (req, res) => {
   //const csrfToken = req.csrfToken();
   res.render('inscription');
   });
-  const registrationRouter = require('./Inscription');
-  app.use('/', registrationRouter); 
+
+app.use('/', registrationRouter); 
+
 const port = process.env.PORT || 5000;
 app.listen(port, () => {
   console.log(`Serveur en cours d'exécution sur le port ${port}`);

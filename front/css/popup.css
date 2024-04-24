@@ -1,0 +1,41 @@
+.popup {
+    display: none;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background-color: burlywood;
+    padding: 40px; /* Augmentez la valeur du padding pour agrandir le contenu du popup */
+    border: 3px solid #ccc;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    z-index: 9999;
+    width: 80%; /* Augmentez la largeur du popup */
+    max-width: 600px; /* Définissez une largeur maximale pour le popup */
+    height: auto; /* Vous pouvez définir une hauteur spécifique ou utiliser auto pour ajuster la hauteur en fonction du contenu */
+    overflow: auto; /* Ajoutez un défilement automatique si le contenu dépasse la taille du popup */
+}
+
+.popup h2 {
+    font-size: 24px; /* Augmentez la taille de la police pour le titre */
+}
+
+.popup input[type="text"],
+.popup textarea,
+.popup input[type="number"] {
+    width: calc(100% - 20px); /* Ajustez la largeur des champs de saisie */
+    padding: 10px; /* Augmentez le padding pour les champs de saisie */
+    margin-bottom: 10px; /* Ajoutez un espacement entre les champs de saisie */
+}
+
+.popup input[type="submit"] {
+    width: 100%; /* Ajustez la largeur du bouton soumettre */
+    padding: 15px; /* Augmentez le padding pour le bouton soumettre */
+    background-color: #4CAF50; /* Couleur de fond */
+    color: white; /* Couleur du texte */
+    border: none; /* Supprimez la bordure */
+    cursor: pointer; /* Curseur pointeur */
+}
+
+.popup input[type="submit"]:hover {
+    background-color: #45a049; /* Changement de couleur au survol */
+}

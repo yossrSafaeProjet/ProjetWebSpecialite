@@ -12,4 +12,16 @@ db.run(`CREATE TABLE IF NOT EXISTS utilisateurs (
     email TEXT,
     password TEXT
 )`);
+
+db.run(`CREATE TABLE IF NOT EXISTS produits (
+    id INTEGER PRIMARY KEY,
+    libelle TEXT,
+    description TEXT,
+    images TEXT,
+    prix REAL,
+    categorie TEXT,
+    url_statistiques TEXT,
+    userId INTEGER,
+    FOREIGN KEY (userId) REFERENCES utilisateurs(id)
+)`);
 db.close();
