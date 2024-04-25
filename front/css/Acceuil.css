@@ -1,16 +1,17 @@
 .navbar {
     background-color: #333;
     overflow: hidden;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
 }
+
 .navbar a {
-    float: right;
-    display: block;
     color: #f2f2f2;
-    text-align: center;
-    padding: 14px 20px;
     text-decoration: none;
 }
-/* Styling pour le bouton Se Connecter */
+
 .login-button {
     background-color: #4CAF50;
     border: none;
@@ -18,21 +19,37 @@
     padding: 10px 20px;
     text-align: center;
     text-decoration: none;
-    display: inline-block;
     font-size: 16px;
-    margin: 4px 2px;
     cursor: pointer;
 }
-/* Styling pour le contenu principal */
-.main-content {
-    background-image: url('background.jpg'); /* Remplacer 'background.jpg' par le chemin de votre image de fond */
-    background-size: cover;
-    background-position: center;
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #333;
-    font-size: 24px;
+
+.search-form {
+    flex-grow: 1;
+    margin: 0 20px;
+}
+
+.search-form input[type="text"] {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.search-form button {
+    padding: 8px 12px;
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.cart-icon {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 10px 20px;
     text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    cursor: pointer;
 }

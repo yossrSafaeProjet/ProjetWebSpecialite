@@ -33,7 +33,7 @@ document.addEventListener("DOMContentLoaded", function() {
     } else {
         message.textContent = "";
     }
-
+    console.log("hhhh");
     // Envoyer les données au serveur avec le jeton CSRF
     fetch('http://localhost:5000/enregistrerUtilisateur', {
         method: 'POST',

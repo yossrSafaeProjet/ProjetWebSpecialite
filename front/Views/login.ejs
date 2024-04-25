@@ -13,21 +13,48 @@
     </header>
 
     <main>
-        <form action="/login" method="post">
+        <form id="loginForm">
             <label for="email">Email:</label>
             <input type="email" id="email" name="email" required>
 
             <label for="password">Mot de passe:</label>
             <input type="password" id="password" name="password" required>
 
-            <button type="submit" class="login-button">Se connecter</button>
+            <button type="button" class="login-button">Se connecter</button>
             
         </form>
-
-
-        <a href="/auth/google">Se connecter avec Google</a>
 
         <p>Vous n'avez pas de compte? <a href="/inscription" >S'inscrire</a></p>
     </main>
 </body>
+<script>
+    document.querySelector('.login-button').addEventListener('click', function() {
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+
+        const formData = { email, password };
+
+        fetch('http://localhost:5000/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Nom d\'utilisateur ou mot de passe incorrect.');
+            }
+            return response.json();
+        })
+        .then(data => {
+            // Rediriger l'utilisateur vers la page vide après une connexion réussie
+            window.location.href = 'http://localhost:3000/Dashbord';
+        })
+        .catch(error => {
+            console.error(error.message);
+            // Afficher un message d'erreur à l'utilisateur
+        });
+    });
+</script>
 </html>

@@ -17,7 +17,6 @@ app.get('/inscription', (req, res) => {
   res.render('inscription');
   });
 
-
 app.listen(port, () => {
   console.log(`Serveur front-end en cours d'exécution sur le port ${port}`);
 });
