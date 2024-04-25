@@ -6,8 +6,9 @@ const Tokens = require('csrf');
 const loginRouter = require('./login');
 const addProductRouter = require('./AjouterProduit');
 const registrationRouter = require('./Inscription');
-const ficheProductRouter = require('./FicheProduct');
-
+const ficheProductRouter=require('./FicheProduct');
+const deleteProductRouter=require('./DeleteProduct');
+const updateProductRouter = require('./UpdateProduct');
 const app = express();
 const tokens = new Tokens();
 
@@ -22,10 +23,17 @@ app.use(cors());
 
 
 
-app.use('', loginRouter);
-app.use('', addProductRouter);
+app.use('/', loginRouter); 
+app.use('', addProductRouter); 
+app.use('', updateProductRouter);
 app.use('', ficheProductRouter);
-app.use('', registrationRouter);
+app.use('',deleteProductRouter );
+app.get('/inscription', (req, res) => {
+  //const csrfToken = req.csrfToken();
+  res.render('inscription');
+  });
+
+app.use('/', registrationRouter); 
 
 const port = process.env.PORT || 5000;
 app.listen(port, () => {

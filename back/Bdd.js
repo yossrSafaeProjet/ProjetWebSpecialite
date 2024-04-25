@@ -20,6 +20,7 @@ db.run(`CREATE TABLE IF NOT EXISTS produits (
     images TEXT,
     prix REAL,
     categorie TEXT,
-    url_statistiques TEXT
+    userId INTEGER,
+    FOREIGN KEY (userId) REFERENCES utilisateurs(id)
 )`);
 db.close();

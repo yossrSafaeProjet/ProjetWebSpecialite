@@ -39,4 +39,69 @@ body {
     padding: 20px;
 }
 
-/* Stylisation additionnelle selon vos besoins */
+.product-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Créez des colonnes dynamiques */
+    gap: 20px; /* Espace entre les cartes */
+}
+
+.card {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    background-color: #fff;
+}
+
+.card img {
+    width: 10%;
+    max-width: 100%;
+    height: auto;
+    width: auto;
+    border-bottom: 1px solid #ccc;
+}
+
+.card-content {
+    padding: 20px;
+}
+
+.card-content h3 {
+    margin-top: 0;
+    font-size: 1.2rem;
+    color: #333;
+}
+
+.card-content p {
+    margin-bottom: 10px;
+    color: #666;
+}
+
+.card-content p:last-child {
+    margin-bottom: 0;
+}
+.close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.close:hover {
+    color: red;
+}
+.delete-icon,
+.edit-icon {
+    font-size: 24px; /* Ajustez la taille de l'icône selon vos préférences */
+    cursor: pointer;
+    margin-left: auto; /* Pour les placer à droite */
+}
+
+.delete-icon {
+    margin-right: 10px; /* Ajoute un peu d'espace entre les icônes */
+}
+/* Vous pouvez conserver la couleur rouge au survol si vous le souhaitez */
+.delete-icon:hover,
+.edit-icon:hover {
+    color: red; 
+}
