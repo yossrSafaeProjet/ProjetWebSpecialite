@@ -6,6 +6,8 @@ const loginRouter = require('./login');
 const addProductRouter = require('./AjouterProduit');
 const registrationRouter = require('./Inscription');
 const ficheProductRouter=require('./FicheProduct');
+const deleteProductRouter=require('./DeleteProduct');
+const updateProductRouter = require('./UpdateProduct');
 const app = express();
 /* require('./Bdd'); */
 
@@ -23,7 +25,9 @@ app.use(cors());
 
 app.use('/', loginRouter); 
 app.use('', addProductRouter); 
+app.use('', updateProductRouter);
 app.use('', ficheProductRouter);
+app.use('',deleteProductRouter );
 app.get('/inscription', (req, res) => {
   //const csrfToken = req.csrfToken();
   res.render('inscription');
