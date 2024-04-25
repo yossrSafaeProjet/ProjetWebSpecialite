@@ -1,7 +1,8 @@
-// server.js
 const express = require('express');
 const passport = require('passport');
-const path = require('path')
+const path = require('path');
+const Tokens = require('csrf');
+
 const loginRouter = require('./login');
 const addProductRouter = require('./AjouterProduit');
 const registrationRouter = require('./Inscription');
@@ -9,17 +10,16 @@ const ficheProductRouter=require('./FicheProduct');
 const deleteProductRouter=require('./DeleteProduct');
 const updateProductRouter = require('./UpdateProduct');
 const app = express();
-/* require('./Bdd'); */
+const tokens = new Tokens();
 
 app.use(express.static('Login'));
-/* app.use(express.static('public')); */
 app.use(passport.initialize());
+
 const bodyParser = require('body-parser');
 app.use(bodyParser.json());
-const cors = require('cors');
 
-app.use(cors()); 
-// Routes
+const cors = require('cors');
+app.use(cors());
 
 
 

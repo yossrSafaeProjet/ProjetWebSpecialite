@@ -5,18 +5,46 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Page d'Accueil</title>
     <link rel="stylesheet" href="/Acceuil.css">
-
 </head>
 <body>
     <!-- Barre de navigation (navbar) -->
     <div class="navbar">
         <a href="/login" class="login-button">Se Connecter</a>
+        <form class="search-form" action="/search" method="GET">
+            <input type="text" name="query" placeholder="Rechercher...">
+            <button type="submit">Rechercher</button>
+        </form>
+        <a href="/panier" class="cart-icon">Panier</a>
     </div>
 
     <!-- Contenu principal avec l'arrière-plan -->
     <div class="main-content">
         <h1>Bienvenue sur notre site de vente en ligne de vêtements !</h1>
-        
     </div>
 </body>
+<script>
+    const mainContent = document.querySelector('.main-content');
+
+    fetch('/AllProduit')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Erreur lors de la récupération des produits');
+            }
+            console.log(response.json());
+            return response.json();
+        })
+        .then(data => {
+            // Créez des éléments HTML pour chaque produit et insérez-les dans la page
+            data.produits.forEach(produit => {
+                const produitElement = document.createElement('div');
+                produitElement.textContent = produit.nom; // Vous pouvez afficher d'autres propriétés du produit
+                mainContent.appendChild(produitElement);
+            });
+        })
+        .catch(error => {
+            console.error(error.message);
+            // Gérez l'erreur ici
+        });
+</script>
+
 </html>

@@ -26,9 +26,7 @@ passport.use(new LocalStrategy(
                     return done(bcryptErr);
                 }
 
-               
                 if (!result) {
-                    console.log('Mot de passe incorrect');
                     return done(null, false, { message: 'Mot de passe incorrect.' });
                 }
 
@@ -55,10 +53,11 @@ router.post('/login', (req, res, next) => {
             return next(err);
         }
         if (!user) {
-            return res.render('login', { message: "Nom d'utilisateur ou mot de passe incorrect." });
+            return res.status(401).json({ message: 'Nom d\'utilisateur ou mot de passe incorrect.' });
         }
+        // L'utilisateur est authentifié avec succès
+        return res.status(200).json({ message: 'Connexion réussie.', user: user });
     })(req, res, next);
 });
-
 
 module.exports = router;
