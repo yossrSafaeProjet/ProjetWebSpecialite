@@ -13,9 +13,8 @@ app.get('/', (req, res) => res.render('Acceuil'));
 
 app.get('/login', (req, res) => res.render('login'));
 app.get('/dashbord', (req, res) => res.render('Dashbord'));
-app.get('/inscription', (req, res) => {
-  res.render('inscription');
-  });
+app.get('/inscription', (req, res) => {res.render('inscription');});
+app.get('/panier', (req, res) => {res.render('Panier');});
 
 app.listen(port, () => {
   console.log(`Serveur front-end en cours d'exécution sur le port ${port}`);
