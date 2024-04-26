@@ -8,7 +8,7 @@ const path = require('path');
 const router = express.Router();
 const dbPath = path.join(__dirname, 'ma_base_de_donnees.db');
 const tokens = new Tokens();
-
+const jwt = require('jsonwebtoken');
 // Créer un jeton CSRF
 const csrfSecret = tokens.secretSync();
 
@@ -21,8 +21,8 @@ router.get('/csrf', (req, res) => {
     const csrfToken = tokens.create(csrfSecret);
     res.json({ csrfToken: csrfToken });
   });
-const jwt = require('jsonwebtoken');
-const db = new SQLite3.Database(dbPath);
+
+
 
 // Configurations Passport
 passport.use(new LocalStrategy(

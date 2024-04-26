@@ -56,21 +56,13 @@
         fetch('http://localhost:5000/login', {
 
         method: 'POST',
+        credentials: 'include',
         headers: {
             'Content-Type': 'application/json',
             'X-CSRF-Token': csrfToken // Envoyer le jeton CSRF dans l'en-tête X-CSRF-Token
         },
         body: JSON.stringify(formData)
     })
-
-            method: 'POST',
-            credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(formData)
-        })
-
         .then(response => {
             if (!response.ok) {
                 throw new Error('Nom d\'utilisateur ou mot de passe incorrect.');
@@ -87,6 +79,7 @@
             console.error(error.message);
             // Afficher un message d'erreur à l'utilisateur
         });
-    });});
+    });
+    });
 </script>
 </html>

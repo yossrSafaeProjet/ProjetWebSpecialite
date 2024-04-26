@@ -15,7 +15,7 @@ const SearchProduct = require('./SearchProduct');
 const Panier = require('./Panier');
 const Statistique = require('./Statistique');
 
-
+const cors=require('cors');
 const app = express();
 const tokens = new Tokens();
 const session = require('express-session');
