@@ -1,4 +1,3 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,12 +12,15 @@
     </header>
 
     <main>
-        <form id="loginForm">
+        <form id="loginForm" action="/login" method="post">
             <label for="email">Email:</label>
             <input type="email" id="email" name="email" required>
 
             <label for="password">Mot de passe:</label>
             <input type="password" id="password" name="password" required>
+
+            <!-- Champ caché pour le jeton CSRF -->
+            <input type="hidden" id="csrfToken" name="csrfToken" value="">
 
             <button type="button" class="login-button">Se connecter</button>
             
@@ -28,13 +30,39 @@
     </main>
 </body>
 <script>
-    document.querySelector('.login-button').addEventListener('click', function() {
-        const email = document.getElementById('email').value;
-        const password = document.getElementById('password').value;
+    document.addEventListener("DOMContentLoaded", function() {
+    // Récupérer le jeton CSRF depuis le serveur
+    fetch('http://localhost:5000/csrf')
+    .then(response => response.json())
+    .then(data => {
+        const csrfToken = data.csrfToken;
+        console.log("Jetons  :", csrfToken); 
+        document.getElementById("csrfToken").value = csrfToken; // Stockage du jeton CSRF dans le champ caché
+    })
+    .catch(error => {
+        console.error('Erreur lors de la récupération du jeton CSRF:', error);
+    });
 
-        const formData = { email, password };
+    // Ajouter un écouteur d'événements au bouton de connexion
+    document.querySelector('.login-button').addEventListener('click', function() {
+        var email = document.getElementById('email').value;
+        var password = document.getElementById('password').value;
+        var csrfToken = document.getElementById('csrfToken').value;
+        const formData = {
+            email,
+            password,
+        };
 
         fetch('http://localhost:5000/login', {
+
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-Token': csrfToken // Envoyer le jeton CSRF dans l'en-tête X-CSRF-Token
+        },
+        body: JSON.stringify(formData)
+    })
+
             method: 'POST',
             credentials: 'include',
             headers: {
@@ -42,6 +70,7 @@
             },
             body: JSON.stringify(formData)
         })
+
         .then(response => {
             if (!response.ok) {
                 throw new Error('Nom d\'utilisateur ou mot de passe incorrect.');
@@ -58,6 +87,6 @@
             console.error(error.message);
             // Afficher un message d'erreur à l'utilisateur
         });
-    });
+    });});
 </script>
 </html>

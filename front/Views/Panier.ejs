@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panier</title>
+    <link rel="stylesheet" href="/Panier.css">
+</head>
+<body>
+    <a href="/" class="home-link">&#8592; Accueil</a>
+    <h1>Panier</h1>
+    <div id="productList"></div>
+    <button id="acheterTout">Acheter tout</button>
+    <button id="viderPanier">Vider panier</button>
+<script>
+    document.addEventListener("DOMContentLoaded", async function() {
+        const productList = document.getElementById('productList');
+        const acheterToutBtn = document.getElementById('acheterTout');
+        const viderPanierBtn = document.getElementById('viderPanier');
+
+        try {
+            // Effectuer une requête Fetch pour récupérer les produits du panier depuis le backend
+            const response = await fetch('http://localhost:5000/panier');
+            if (!response.ok) {
+                throw new Error('Erreur lors de la récupération des produits du panier');
+            }
+            const products = await response.json();
+
+            // Utiliser map pour créer un élément de liste <div> pour chaque produit
+            const productElements = products.map(product => {
+                const productDiv = document.createElement('div');
+                productDiv.classList.add('product-item');
+
+                // Créer l'image du produit
+                const img = document.createElement('img');
+                img.src = product.images;
+                img.alt = product.libelle;
+                img.classList.add('product-image');
+
+                // Insérer les informations du produit dans des éléments de div
+                productDiv.appendChild(img);
+                productDiv.innerHTML += `
+                    <h3>${product.libelle}</h3>
+                    <p>Description: ${product.description}</p>
+                    <p>Prix: ${product.prix} €</p>
+                    <p>Catégorie: ${product.categorie}</p>
+                    <button class="acheterBtn">Acheter</button>
+                    <button class="retirerBtn" data-product-id="${product.id}">Retirer</button>
+                `;
+
+                return productDiv;
+            });
+
+            // Ajouter les éléments de produit à la liste de produits
+            productElements.forEach(element => {
+                productList.appendChild(element);
+            });
+        } catch (error) {
+            console.error(error.message);
+            // Gérez l'erreur ici
+        }
+
+        // Ajouter un écouteur d'événement pour chaque bouton "Acheter" et "Retirer"
+        productList.addEventListener('click', async function(event) {
+        if (event.target.classList.contains('acheterBtn')) {
+            // Rediriger vers la page de connexion lors de l'achat
+            window.location.href = '/login';
+        } else if (event.target.classList.contains('retirerBtn')) {
+            const productId = event.target.dataset.productId;
+            await retirerProduit(productId); // Appeler la fonction pour retirer le produit du panier
+            // Mettre à jour l'affichage après avoir retiré le produit
+            const productItem = event.target.closest('.product-item');
+            productItem.remove(); // Supprimer l'élément du DOM
+        }
+    });
+
+        // Ajouter un écouteur d'événement pour le bouton "Acheter tout"
+        acheterToutBtn.addEventListener('click', async function() {
+            // Rediriger vers la page de connexion lors de l'achat de tous les produits
+            window.location.href = '/login';
+        });
+
+        // Ajouter un écouteur d'événement pour le bouton "Vider panier"
+        viderPanierBtn.addEventListener('click', async function() {
+            if (confirm('Êtes-vous sûr de vouloir vider le panier?')) {
+                await viderPanier(); // Appeler la fonction pour vider le panier
+                // Actualiser la page après avoir vidé le panier
+                window.location.reload();
+            }
+        });
+
+        // Fonction pour retirer un produit du panier
+        async function retirerProduit(productId) {
+            try {
+                const response = await fetch(`http://localhost:5000/panier/${productId}`, {
+                    method: 'DELETE', // Utiliser la méthode DELETE pour retirer le produit du panier
+                });
+                if (!response.ok) {
+                    throw new Error('Erreur lors de la suppression du produit du panier');
+                }
+                console.log('Produit retiré avec succès du panier');
+            } catch (error) {
+                console.error(error.message);
+                // Gérez l'erreur ici
+            }
+        }
+
+        // Fonction pour vider le panier
+        async function viderPanier() {
+            try {
+                const response = await fetch('http://localhost:5000/panier', {
+                    method: 'DELETE', // Utiliser la méthode DELETE pour vider le panier
+                });
+                if (!response.ok) {
+                    throw new Error('Erreur lors de la suppression de tous les produits du panier');
+                }
+                console.log('Panier vidé avec succès');
+            } catch (error) {
+                console.error(error.message);
+                // Gérez l'erreur ici
+            }
+        }
+
+    });
+</script>
+</body>
+</html>

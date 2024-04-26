@@ -1,12 +1,10 @@
-/* 
 /* Ajoutez des styles CSS ici pour styliser vos éléments */
 body {
     font-family: Arial, sans-serif;
-    background-color:blue;
+    background-color: #f2f2f2;
     margin: 0;
     padding: 0;
-    background: url("https://im.qccdn.fr/node/application-mobile-queldebit-92526/thumbnail_800x480px-116290.jpg");
-
+    background-color:aquamarine;
 }
 
 header {
@@ -17,12 +15,12 @@ header {
 }
 
 main {
-    max-width: 600px;
+    max-width: 400px;
     margin: 70px auto;
-    background-color:blue;
+    background-color: #fff;
     padding: 20px;
     border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 10px rgb(142, 194, 142);
 }
 
 form {
@@ -32,6 +30,7 @@ form {
 
 label {
     margin-bottom: 8px;
+    font-weight: bold;
 }
 
 .input {
@@ -39,24 +38,26 @@ label {
     margin-bottom: 15px;
     border: 1px solid #ccc;
     border-radius: 4px;
+    outline: none;
 }
 
 .button {
-    background-color: #4caf50;
+    background-color: #3498db;
     color: white;
     padding: 10px;
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
 .button:hover {
-    background-color: #45a049;
+    background-color: #2980b9;
 }
 
 a {
     display: inline-block;
-    background-color: #4285f4;
+    background-color: #f44336;
     color: white;
     padding: 10px;
     text-decoration: none;
@@ -65,7 +66,7 @@ a {
 }
 
 a:hover {
-    background-color: #357ae8;
+    background-color: #d32f2f;
 }
 
 footer {
@@ -73,17 +74,22 @@ footer {
     text-align: center;
     color: #666;
 }
-button.login-button {
+
+.login-button {
     border: none;
     border-radius: 5px;
     padding: 10px 20px;
-    background-color: #3498db;
+    background-color: #4caf50;
     color: white;
     font-size: 16px;
     cursor: pointer;
     max-width: 210px;
-    margin-top: 50px;
+    margin-top: 20px;
     transition: background-color 0.3s ease;
-    margin:auto;
-    
+    margin: auto;
+    display: block;
+}
+
+.login-button:hover {
+    background-color: #43a047;
 }
