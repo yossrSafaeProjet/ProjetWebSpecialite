@@ -21,6 +21,9 @@ router.get('/csrf', (req, res) => {
     const csrfToken = tokens.create(csrfSecret);
     res.json({ csrfToken: csrfToken });
   });
+const jwt = require('jsonwebtoken');
+const db = new SQLite3.Database(dbPath);
+
 // Configurations Passport
 passport.use(new LocalStrategy(
     { usernameField: 'email' },
@@ -60,7 +63,9 @@ passport.deserializeUser((id, done) => {
     });
 });
 
+
 router.post('/login', (req, res, next) => {
+
     // Vérifier le jeton CSRF
     const csrfToken = req.headers['x-csrf-token'];
     //console.log(tokens.verify(csrfSecret, csrfToken));
@@ -78,6 +83,27 @@ router.post('/login', (req, res, next) => {
         // L'utilisateur est authentifié avec succès
         return res.status(200).json({ message: 'Connexion réussie.', user: user });
     })(req, res, next);
+  passport.authenticate('local', (err, user, info) => {
+      if (err) {
+          return next(err);
+      }
+      if (!user) {
+          return res.status(401).json({ message: 'Nom d\'utilisateur ou mot de passe incorrect.' });
+      }
+
+      // Générer un token JWT
+      const token = jwt.sign({ userId: user.id }, 'azerty', { expiresIn: '1h' });
+      
+      // Stocker le token dans la session de l'utilisateur
+      req.session.token = token;
+      
+      // Renvoyer le message de connexion réussie
+      return res.status(200).json({ message: 'Connexion réussie.' });
+  })(req, res, next);
+
 });
+
+
+
 
 module.exports = router;

@@ -54,6 +54,7 @@
         };
 
         fetch('http://localhost:5000/login', {
+
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -61,13 +62,24 @@
         },
         body: JSON.stringify(formData)
     })
+
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        })
+
         .then(response => {
             if (!response.ok) {
                 throw new Error('Nom d\'utilisateur ou mot de passe incorrect.');
             }
             return response.json();
+
         })
         .then(data => {
+            
             // Rediriger l'utilisateur vers la page vide après une connexion réussie
             window.location.href = 'http://localhost:3000/Dashbord';
         })
