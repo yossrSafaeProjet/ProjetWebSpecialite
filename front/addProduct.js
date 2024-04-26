@@ -1,4 +1,4 @@
-document.getElementById('productForm').addEventListener('submit', function(event) {
+/* document.getElementById('productForm').addEventListener('submit', function(event) {
     event.preventDefault(); 
 
     const formData = new FormData(this);
@@ -21,3 +21,4 @@ document.getElementById('productForm').addEventListener('submit', function(event
         // Gère les erreurs, par exemple afficher un message d'erreur à l'utilisateur
     });
 });
+ */
