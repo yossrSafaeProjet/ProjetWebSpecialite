@@ -73,16 +73,6 @@ router.post('/login', (req, res, next) => {
         return res.status(403).json({ message: 'Token CSRF invalide.' });
     }
 
-    passport.authenticate('local', (err, user, info) => {
-        if (err) {
-            return next(err);
-        }
-        if (!user) {
-            return res.status(401).json({ message: 'Nom d\'utilisateur ou mot de passe incorrect.' });
-        }
-        // L'utilisateur est authentifié avec succès
-        return res.status(200).json({ message: 'Connexion réussie.', user: user });
-    })(req, res, next);
   passport.authenticate('local', (err, user, info) => {
       if (err) {
           return next(err);
