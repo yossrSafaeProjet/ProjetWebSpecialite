@@ -9,6 +9,11 @@ const registrationRouter = require('./Inscription');
 const ficheProductRouter=require('./FicheProduct');
 const deleteProductRouter=require('./DeleteProduct');
 const updateProductRouter = require('./UpdateProduct');
+const SearchProduct = require('./SearchProduct');
+const Panier = require('./Panier');
+const Statistique = require('./Statistique');
+
+
 const app = express();
 const tokens = new Tokens();
 
@@ -28,10 +33,12 @@ app.use('', addProductRouter);
 app.use('', updateProductRouter);
 app.use('', ficheProductRouter);
 app.use('',deleteProductRouter );
-app.get('/inscription', (req, res) => {
-  //const csrfToken = req.csrfToken();
-  res.render('inscription');
-  });
+app.use('',SearchProduct );
+app.use('',Panier);
+app.use('',Statistique);
+
+
+app.get('/inscription', (req, res) => {res.render('inscription');});
 
 app.use('/', registrationRouter); 
 

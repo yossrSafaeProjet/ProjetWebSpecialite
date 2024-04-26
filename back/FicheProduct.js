@@ -43,7 +43,7 @@ router.get('/product/:productId', (req, res) => {
         if (!produit) {
             return res.status(404).json({ error: 'Produit non trouvé' });
         }
-
+        //res.render('FichePanier', { produit }); 
         res.json({ produit });
     });
 });

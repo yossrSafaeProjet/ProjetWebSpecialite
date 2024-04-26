@@ -35,7 +35,7 @@ router.post('/enregistrerUtilisateur', (req, res) => {
 
   const utilisateur = req.body;
   const db = new SQLite3.Database(dbPath);
-
+  console.log(utilisateur);
   // Vérifiez si les mots de passe correspondent
   if (utilisateur.password !== utilisateur.confirmationMotDePasse) {
     res.status(400).send('Les mots de passe ne correspondent pas. Veuillez réessayer.');
@@ -57,6 +57,7 @@ router.post('/enregistrerUtilisateur', (req, res) => {
         console.error(err.message);
         res.status(500).send('Erreur lors de l\'enregistrement de l\'utilisateur.');
       } else {
+        
         res.json(utilisateur);
       }
     });

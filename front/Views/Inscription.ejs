@@ -53,8 +53,12 @@
             var csrfToken = document.getElementById('csrfToken').value; // Récupération du jeton CSRF
 
             var message = document.getElementById('message');
-            console.log(csrfToken);
-            if (password !== confirmationMotDePasse) {
+            // Vérification de la politique de sécurité du mot de passe
+            var passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+            if (!passwordRegex.test(password)) {
+                message.textContent = "Le mot de passe doit contenir au moins 8 caractères, dont une lettre majuscule, une lettre minuscule, un chiffre et un caractère spécial.";
+                return;
+            } else if (password !== confirmationMotDePasse) {
                 message.textContent = "Les mots de passe ne correspondent pas. Veuillez réessayer.";
                 return;
             } else {

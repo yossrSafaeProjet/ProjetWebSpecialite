@@ -10,41 +10,222 @@
     <!-- Barre de navigation (navbar) -->
     <div class="navbar">
         <a href="/login" class="login-button">Se Connecter</a>
-        <form class="search-form" action="/search" method="GET">
-            <input type="text" name="query" placeholder="Rechercher...">
+        <form id="searchForm" class="search-form" action="/search" method="GET">
+            <input id="searchInput" type="text" name="query" placeholder="Rechercher...">
             <button type="submit">Rechercher</button>
         </form>
-        <a href="/panier" class="cart-icon">Panier</a>
+        <a href="#" id="lien" class="cart-icon">Panier</a>
     </div>
 
     <!-- Contenu principal avec l'arrière-plan -->
     <div class="main-content">
         <h1>Bienvenue sur notre site de vente en ligne de vêtements !</h1>
+        <!-- Produits affichés initialement -->
+        <div id="originalProductList">
+            <!-- Les produits initiaux seront affichés ici -->
+        </div>
+        <!-- Résultats de recherche -->
+        <div id="searchResultList" style="display: none;">
+            <!-- Les résultats de recherche seront affichés ici -->
+        </div>
     </div>
-</body>
-<script>
-    const mainContent = document.querySelector('.main-content');
 
-    fetch('/AllProduit')
+    <!-- Conteneur pour afficher les détails du produit -->
+    <div id="productDetailContainer" style="display: none;">
+        <!-- Les détails du produit seront affichés ici -->
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", async function() {
+            const originalProductList = document.getElementById('originalProductList');
+            const searchResultList = document.getElementById('searchResultList');
+            const searchForm = document.getElementById('searchForm');
+            const searchInput = document.getElementById('searchInput');
+            const lien = document.getElementById('lien');
+            const productDetailContainer = document.getElementById('productDetailContainer');
+            // Tableau pour stocker les produits ajoutés au panier
+            let panier = [];
+
+            try {
+                // Récupération des produits initiaux
+                const response = await fetch('http://localhost:5000/AllProduit');
+                if (!response.ok) {
+                    throw new Error('Erreur lors de la récupération des produits');
+                }
+                const responseData = await response.json();
+                console.log(responseData.produits);
+                if (responseData.produits.length > 0) {
+                    responseData.produits.forEach(product => {
+                        const productDiv = createProductElement(product);
+                        originalProductList.appendChild(productDiv);
+                    });
+                }
+            } catch (error) {
+                console.error(error.message);
+                // Gérez l'erreur ici
+            }
+
+            // Écouteur d'événement pour le formulaire de recherche
+            searchForm.addEventListener('submit', async function(event) {
+                event.preventDefault(); // Empêche l'envoi du formulaire par défaut
+
+                const searchTerm = searchInput.value.trim();
+                if (searchTerm === '') {
+                    return; // Ne rien faire si le champ de recherche est vide
+                }
+
+                try {
+                    // Recherche des produits correspondant au terme de recherche
+                    const response = await fetch(`http://localhost:5000/search?query=${encodeURIComponent(searchTerm)}`);
+                    if (!response.ok) {
+                        throw new Error('Erreur lors de la recherche');
+                    }
+                    const searchData = await response.json();
+                    console.log(searchData);
+                    displaySearchResults(searchData.results);
+                } catch (error) {
+                    console.error(error.message);
+                    // Gérez l'erreur ici
+                }
+            });
+
+            // Fonction pour créer un élément de produit
+            function createProductElement(product) {
+                const productDiv = document.createElement('div');
+                productDiv.classList.add('product');
+
+                // Ajout de la photo
+                const img = document.createElement('img');
+                img.src = product.images;
+                img.alt = product.libelle;
+                productDiv.appendChild(img);
+
+                // Ajout du nom
+                const nom = document.createElement('h3');
+                nom.textContent = product.libelle;
+                productDiv.appendChild(nom);
+
+                // Ajout du prix
+                const prix = document.createElement('p');
+                prix.textContent = `Prix : ${product.prix} €`;
+                productDiv.appendChild(prix);
+
+                // Ajout du categorie
+                const categorie = document.createElement('p');
+                categorie.textContent = product.categorie;
+                productDiv.appendChild(categorie);
+
+                // Ajout du bouton d'achat
+                const boutonAchat = document.createElement('button');
+                boutonAchat.textContent = 'Ajouter au panier';
+                boutonAchat.addEventListener('click', () => {
+                    alert('Produit ajouté au panier');
+                    ajouterAuPanier(product);
+                });
+                productDiv.appendChild(boutonAchat);
+
+                // Ajout du bouton afficher détails
+                const boutonDetails = document.createElement('button');
+                boutonDetails.textContent = 'Afficher le détail';
+                boutonDetails.addEventListener('click', () => {
+                    console.log(product);
+                    afficherDetailProduit(product);
+                });
+                productDiv.appendChild(boutonDetails);
+
+                return productDiv;
+            }
+
+            // Fonction pour afficher les résultats de recherche
+            function displaySearchResults(results) {
+                searchResultList.innerHTML = ''; // Efface les résultats précédents
+                results.forEach(product => {
+                    const productDiv = createProductElement(product);
+                    searchResultList.appendChild(productDiv);
+                });
+                // Cacher les produits affichés initialement
+                originalProductList.style.display = 'none';
+                // Afficher les résultats de la recherche
+                searchResultList.style.display = 'block';
+            }
+
+            // Fonction pour ajouter un produit au panier
+            function ajouterAuPanier(product) {
+                panier.push(product);
+            }
+
+            // Fonction pour afficher le détail d'un produit
+        function afficherDetailProduit(product) {
+        const productId = product.id; // Récupérez l'ID du produit
+        // Utilisez fetch pour récupérer les détails du produit en fonction de son ID
+        //console.log(productId);
+        fetch(`http://localhost:5000/product/${productId}`)
         .then(response => {
             if (!response.ok) {
-                throw new Error('Erreur lors de la récupération des produits');
+                throw new Error('Erreur lors de la récupération des détails du produit');
             }
-            console.log(response.json());
             return response.json();
         })
-        .then(data => {
-            // Créez des éléments HTML pour chaque produit et insérez-les dans la page
-            data.produits.forEach(produit => {
-                const produitElement = document.createElement('div');
-                produitElement.textContent = produit.nom; // Vous pouvez afficher d'autres propriétés du produit
-                mainContent.appendChild(produitElement);
-            });
+        .then(produit => {
+            // Masquer le contenu principal
+            originalProductList.style.display = 'none';
+            searchResultList.style.display = 'none';
+            // Afficher le conteneur des détails du produit
+            productDetailContainer.style.display = 'block';
+            // Afficher les détails du produit dans le conteneur
+            productDetailContainer.innerHTML = `
+                <h2>${product.libelle}</h2>
+                <img src= ${product.images}>
+                <p>Catégorie: ${product.categorie}</p>
+                <p>Description: ${product.description}</p>
+                <p>Prix:${product.prix} €</p>
+                <button id="retourBtn">Retour</button>
+            `;
+        // Ajouter un écouteur d'événement pour le bouton "Retour"
+        const retourBtn = document.getElementById('retourBtn');
+        retourBtn.addEventListener('click', function() {
+            // Afficher à nouveau le contenu principal
+            originalProductList.style.display = 'block';
+            searchResultList.style.display = 'block';
+            // Masquer le conteneur des détails du produit
+            productDetailContainer.style.display = 'none';
+        });
         })
         .catch(error => {
             console.error(error.message);
             // Gérez l'erreur ici
         });
-</script>
+    }
 
+
+            // Fonction pour envoyer les produits au backend
+            async function envoyerProduitsAuBackend(produits) {
+                try {
+                    const response = await fetch('http://localhost:5000/panier', {
+                        method: 'POST', // Méthode POST pour envoyer les données
+                        headers: {
+                            'Content-Type': 'application/json' // Type de contenu JSON
+                        },
+                        body: JSON.stringify({ produits: produits }) // Conversion des données en format JSON
+                    });
+                    if (!response.ok) {
+                        throw new Error('Erreur lors de l\'envoi des produits au backend');
+                    }
+                    console.log('Produits envoyés avec succès au backend');
+                    // Redirection vers la page du panier après l'envoi des produits
+                    window.location.href = 'http://localhost:3000/Panier';
+                } catch (error) {
+                    console.error(error.message);
+                    // Gérez l'erreur ici
+                }
+            }
+
+            // Écouteur d'événement pour le clic sur le lien du panier
+            lien.addEventListener('click', function(event) {
+                event.preventDefault(); // Empêche le comportement par défaut du lien
+                envoyerProduitsAuBackend(panier); // Appel de la fonction pour envoyer les produits au backend
+            });
+        });
+    </script>
+</body>
 </html>
