@@ -48,7 +48,7 @@
 
             try {
                 // Récupération des produits initiaux
-                const response = await fetch('http://localhost:5000/AllProduit');
+                const response = await fetch('http://localhost:5000/Produits');
                 if (!response.ok) {
                     throw new Error('Erreur lors de la récupération des produits');
                 }
@@ -159,7 +159,7 @@
         const productId = product.id; // Récupérez l'ID du produit
         // Utilisez fetch pour récupérer les détails du produit en fonction de son ID
         //console.log(productId);
-        fetch(`http://localhost:5000/product/${productId}`)
+        fetch(`http://localhost:5000/produit/${productId}`)
         .then(response => {
             if (!response.ok) {
                 throw new Error('Erreur lors de la récupération des détails du produit');

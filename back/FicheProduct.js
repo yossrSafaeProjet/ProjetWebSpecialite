@@ -27,6 +27,17 @@ router.get('/AllProduit', (req, res) => {
     // Vérifiez si l'utilisateur est authentifié
    
 });
+router.get('/Produits', (req, res) => {
+    db.all('SELECT * FROM produits',(err, produits) => {
+        if (err) {
+            return res.status(500).json({ error: 'Erreur lors de la récupération des produits' });
+        }
+
+        res.json({ produits });
+    });
+    
+      
+   });
 function getProductForUser(userId,res) {
   
     db.all('SELECT * FROM produits WHERE userId= ? ' ,[userId], (err, produits) => {
@@ -66,12 +77,25 @@ router.get('/product/:productId', (req, res) => {
             console.log('ID de l\'utilisateur extrait du jeton JWT :', userId);
         }
     });
-    // Assurez-vous que l'utilisateur est authentifié et que req.user contient les informations nécessaires
-
-
-    // Vérifiez si l'utilisateur est authentifié
+   
    
 });
+router.get('/produit/:productId', (req, res) => {
+    const productId = req.params.productId;
+    // Recherchez le produit dans la base de données par son ID
+    db.get('SELECT * FROM produits WHERE id = ?', [productId], (err, produit) => {
+        if (err) {
+            return res.status(500).json({ error: 'Erreur lors de la récupération du produit' });
+        }
+
+        if (!produit) {
+            return res.status(404).json({ error: 'Produit non trouvé' });
+        }
+        //res.render('FichePanier', { produit }); 
+        res.json({ produit });
+    });
+    
+    });
 
 
 

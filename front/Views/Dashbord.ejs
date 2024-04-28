@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -23,6 +24,7 @@
         <span class="close" onclick="fermerPopup()">&times;</span>
         <span id="popupTitle" class="popup-title">Ajouter un produit</span>
         <form action="/addProduct" method="post" id="productForm">
+            <input type="hidden" id="csrfToken" name="csrfToken" value="">
             <input type="hidden" id="productId" name="productId" value>
             <label for="libelle">Libellé:</label><br>
             <input type="text" id="libelle" name="libelle" value required><br>

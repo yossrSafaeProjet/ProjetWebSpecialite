@@ -1,3 +1,18 @@
+async function fetchCsrfToken() {
+    try {
+        const response = await fetch('http://localhost:5000/csrf-delete');
+        const data = await response.json();
+        const csrfToken = data.csrfToken;
+        console.log(csrfToken);
+        document.getElementById('csrfToken').value = csrfToken; // Stockage du jeton CSRF dans le champ caché
+    } catch (error) {
+        console.error('Error fetching CSRF token:', error);
+    }
+}
+document.addEventListener('DOMContentLoaded', () => {
+    fetchCsrfToken();
+});
+
 function afficherPopup() {
     configureMode('ajout');
     var popup = document.getElementById("popup");
@@ -249,21 +264,29 @@ await deleleProducts(productId);
 
 async function deleleProducts(productId) {
 
-try {
-const response = await fetch(`http://localhost:5000/product/${productId}`, {
-method: 'DELETE',
-});
+    try {
+        const csrfToken = document.getElementById('csrfToken').value; // Récupérer le token CSRF stocké côté client
 
-if (response.ok) {
-// Mettez à jour la liste des publications après la suppression
-const productElement = document.getElementById(productId);
-    if (productElement) {
-        productElement.remove();
+        const response = await fetch(`http://localhost:5000/product/${productId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-Token': csrfToken // Inclure le token CSRF dans les en-têtes de la requête
+            }
+        });
+
+        if (response.ok) {
+            // Suppression réussie : mettre à jour l'interface utilisateur
+            const productElement = document.getElementById(productId);
+            if (productElement) {
+                productElement.remove();
+            }
+        } else {
+            // Gérer les erreurs liées à la suppression du produit
+            console.error('Erreur lors de la suppression du produit');
+        }
+    } catch (error) {
+        // Gérer les erreurs de manière appropriée
+        console.error('Erreur lors de la suppression du produit :', error);
     }
-} else {
-console.error('Erreur lors de la suppression de la publication');
-}
-} catch (error) {
-console.error('Erreur lors de la suppression de la publication :', error);
-}
 }
